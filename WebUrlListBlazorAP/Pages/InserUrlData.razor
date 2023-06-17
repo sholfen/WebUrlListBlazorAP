@@ -5,9 +5,9 @@
 @inject WebUrlDataService service
 
 <EditForm Model="@urlModel" OnSubmit="@Insert">
-    <InputText DisplayName="命名" @bind-Value="urlModel.Name" />
-    <InputText DisplayName="網址" @bind-Value="urlModel.Url"></InputText>
-    <button type="submit">Submit</button>
+    <span>名稱</span><InputText @bind-Value="urlModel.Name" /> <br />
+    <span>網址</span><InputText @bind-Value="urlModel.Url"></InputText> <br />
+    <button type="submit">新增</button>
 </EditForm>
 
 @code {

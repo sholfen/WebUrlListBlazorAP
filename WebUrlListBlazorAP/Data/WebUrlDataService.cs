@@ -8,7 +8,7 @@ namespace WebUrlListBlazorAP.Data
 
         public WebUrlDataService() 
         {
-            //_list = new ConcurrentBag<WebUrlData>();
+
         }
 
         public void Insert(string name, string url)
