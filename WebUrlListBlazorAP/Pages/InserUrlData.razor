@@ -1,0 +1,23 @@
+﻿@page "/Insert"
+<h3>InserUrlData</h3>
+
+@using WebUrlListBlazorAP.Data
+@inject WebUrlDataService service
+
+<EditForm Model="@urlModel" OnSubmit="@Insert">
+    <InputText DisplayName="命名" @bind-Value="urlModel.Name" />
+    <InputText DisplayName="網址" @bind-Value="urlModel.Url"></InputText>
+    <button type="submit">Submit</button>
+</EditForm>
+
+@code {
+
+    private WebUrlData urlModel = new();
+
+    private void Insert()
+    {
+        service.Insert(urlModel.Name, urlModel.Url);
+        urlModel.Name = string.Empty;
+        urlModel.Url = string.Empty;
+    }
+}

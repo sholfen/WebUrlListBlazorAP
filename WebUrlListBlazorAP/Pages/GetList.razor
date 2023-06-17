@@ -1,0 +1,33 @@
+﻿@page "/GetList"
+
+@using WebUrlListBlazorAP.Data
+@inject WebUrlDataService service
+
+<h3>GetList</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Url</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in list)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td><a href="@item.Url" target="_blank">@item.Url</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<WebUrlData> list;
+
+    protected override async Task OnInitializedAsync()
+    {
+        list = service.GetList();
+    }
+}
