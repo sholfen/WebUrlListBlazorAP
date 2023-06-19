@@ -9,15 +9,20 @@
     <span>網址</span><InputText @bind-Value="urlModel.Url"></InputText> <br />
     <button type="submit">新增</button>
 </EditForm>
+<span>@message</span>
 
 @code {
 
     private WebUrlData urlModel = new();
+    private string message = string.Empty;
 
-    private void Insert()
+    private async Task Insert()
     {
         service.Insert(urlModel.Name, urlModel.Url);
         urlModel.Name = string.Empty;
         urlModel.Url = string.Empty;
+        message = "已新增";
+        await Task.Delay(1000);
+        message = string.Empty;
     }
 }
