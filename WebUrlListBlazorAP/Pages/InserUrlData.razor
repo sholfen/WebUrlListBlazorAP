@@ -4,6 +4,8 @@
 @using WebUrlListBlazorAP.Data
 @inject WebUrlDataService service
 
+<Toasts class="p-3" Messages="messages" AutoHide="true" Delay="1000" Placement="ToastsPlacement.TopCenter" />
+
 <EditForm Model="@urlModel" OnSubmit="@Insert">
     <span>名稱</span><InputText @bind-Value="urlModel.Name" /> <br />
     <span>網址</span><InputText @bind-Value="urlModel.Url"></InputText> <br />
@@ -15,14 +17,19 @@
 
     private WebUrlData urlModel = new();
     private string message = string.Empty;
+    List<ToastMessage> messages = new List<ToastMessage>();
 
     private async Task Insert()
     {
         service.Insert(urlModel.Name, urlModel.Url);
         urlModel.Name = string.Empty;
         urlModel.Url = string.Empty;
-        message = "已新增";
-        await Task.Delay(1000);
-        message = string.Empty;
+
+        ToastMessage message = new ToastMessage
+        {
+            Type = ToastType.Info,
+            Message = $"已新增",
+        };
+        messages.Add(message);
     }
 }
