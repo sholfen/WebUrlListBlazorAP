@@ -2,6 +2,9 @@
 
 @using WebUrlListBlazorAP.Data
 @inject WebUrlDataService service
+@inject IJSRuntime jsInterop
+
+<Toasts class="p-3" Messages="messages" AutoHide="true" Delay="1000" Placement="ToastsPlacement.TopCenter" />
 
 <h3>GetList</h3>
 
@@ -10,6 +13,7 @@
         <tr>
             <th>Name</th>
             <th>Url</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -18,6 +22,7 @@
             <tr>
                 <td>@item.Name</td>
                 <td><a href="@item.Url" target="_blank">@item.Url</a></td>
+                <td><input type="button" value="複製文字" @onclick="@(e => CopyToClipboard(@item.Url))" /></td>
             </tr>
         }
     </tbody>
@@ -25,9 +30,23 @@
 
 @code {
     private List<WebUrlData> list = new List<WebUrlData>();
+    private string message = string.Empty;
+    List<ToastMessage> messages = new List<ToastMessage>();
 
     protected override async Task OnInitializedAsync()
     {
         list = service.GetList();
+    }
+
+    private async Task CopyToClipboard(string text)
+    {
+        jsInterop.InvokeVoidAsync("navigator.clipboard.writeText", text);
+
+        ToastMessage message = new ToastMessage
+            {
+                Type = ToastType.Info,
+                Message = $"已複製",
+            };
+        messages.Add(message);
     }
 }
