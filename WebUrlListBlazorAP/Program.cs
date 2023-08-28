@@ -1,4 +1,5 @@
 using BlazorBootstrap;
+using Blazored.LocalStorage;
 using WebUrlListBlazorAP.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +10,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddSingleton<WebUrlDataService>();
 builder.Services.AddBlazorBootstrap();
+builder.Services.AddBlazoredLocalStorage();
 
 var app = builder.Build();
 

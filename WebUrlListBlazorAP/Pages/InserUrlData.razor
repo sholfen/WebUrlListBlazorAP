@@ -2,7 +2,9 @@
 <h3>InserUrlData</h3>
 
 @using WebUrlListBlazorAP.Data
+@using Blazored.LocalStorage
 @inject WebUrlDataService service
+@inject ILocalStorageService localstorage
 
 <Toasts class="p-3" Messages="messages" AutoHide="true" Delay="1000" Placement="ToastsPlacement.TopCenter" />
 
@@ -14,6 +16,7 @@
 <span>@message</span>
 
 @code {
+    //https://www.c-sharpcorner.com/article/using-localstorage-to-cache-data-in-blazor-applications/
 
     private WebUrlData urlModel = new();
     private string message = string.Empty;
@@ -21,9 +24,21 @@
 
     private async Task Insert()
     {
-        service.Insert(urlModel.Name, urlModel.Url);
+        List<WebUrlData> list = await localstorage.GetItemAsync<List<WebUrlData>>(nameof(WebUrlData));
+        if (list == null)
+        {
+            list = new List<WebUrlData>();
+        }
+        list.Add(new WebUrlData { Name = urlModel.Name, Url = urlModel.Url });
+
+        foreach (var item in list)
+        {
+            service.Insert(item.Name, item.Url);
+        }
+        
         urlModel.Name = string.Empty;
-        urlModel.Url = string.Empty;
+        urlModel.Url = string.Empty; 
+        await localstorage.SetItemAsync<List<WebUrlData>>(nameof(WebUrlData), list);
 
         ToastMessage message = new ToastMessage
         {

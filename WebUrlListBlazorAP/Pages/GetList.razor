@@ -1,8 +1,10 @@
 ﻿@page "/GetList"
 
 @using WebUrlListBlazorAP.Data
+@using Blazored.LocalStorage
 @inject WebUrlDataService service
 @inject IJSRuntime jsInterop
+@inject ILocalStorageService localstorage;
 
 <Toasts class="p-3" Messages="messages" AutoHide="true" Delay="1000" Placement="ToastsPlacement.TopCenter" />
 
@@ -36,11 +38,19 @@
     protected override async Task OnInitializedAsync()
     {
         list = service.GetList();
+        List<WebUrlData> list2 = await localstorage.GetItemAsync<List<WebUrlData>>(nameof(WebUrlData));
+        if (list.Count == 2)
+        {
+            if (list2 != null && list2.Count != 0)
+            {
+                list.AddRange(list2);
+            }
+        }
     }
 
     private async Task CopyToClipboard(string text)
     {
-        jsInterop.InvokeVoidAsync("navigator.clipboard.writeText", text);
+        await jsInterop.InvokeVoidAsync("navigator.clipboard.writeText", text);
 
         ToastMessage message = new ToastMessage
             {
